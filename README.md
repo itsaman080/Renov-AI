@@ -12,6 +12,16 @@ RenovAI is a full‑stack web app that lets homeowners upload an exterior photo,
 | Styling | Plain CSS (design tokens) |
 | PDF | jsPDF + html2canvas |
 
+---
+
+## 📸 Screenshots
+
+|                                 |                                   |                                 |
+| ------------------------------- | --------------------------------- | ------------------------------- |
+| ![layout](Demo/Screenshot1-RenovAI.png) | ![Action](Demo/Screenshot2-RenovAI.png) | ![Results](Demo/Screenshot3-RenovAI.png) |
+
+> 
+---
 ## Project Structure
 
 ```

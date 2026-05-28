@@ -1,109 +1,115 @@
-## RenovAI — Exterior Renovation Planner
+# RenovAI — AI Exterior Renovation & Cost Estimator
 
-RenovAI is a web app that helps homeowners visualize exterior renovation ideas, estimate material quantities, and generate a cost breakdown before construction begins.
-
-## Key Features
-- Upload a house exterior photo with quality checks
-- AI zone detection (walls, windows, balcony, parapet, gate, etc.)
-- Edit/add/remove zones and adjust area estimates
-- Material catalog with finishes and colors
-- AI-generated redesign description and material quantities
-- Cost estimation with editable rates and contingency
-- PDF report download
-- Project auto‑save and resume (localStorage)
+RenovAI is a full‑stack web app that lets homeowners upload an exterior photo, apply renovation materials, and receive quantity + cost estimates with a downloadable report.
 
 ## Tech Stack
-- Frontend: React 18, Lucide React, CSS variables
-- Backend: Node.js + Express
-- AI: Groq Llama 4 Scout Vision (`meta-llama/llama-4-scout-17b-16e-instruct`)
-- PDF: jsPDF + html2canvas
+
+| Layer | Technology |
+|---|---|
+| Frontend | React 18 |
+| Backend | Node.js + Express |
+| LLM | Groq — Llama 4 Scout Vision |
+| Styling | Plain CSS (design tokens) |
+| PDF | jsPDF + html2canvas |
 
 ## Project Structure
+
 ```
 Renov_AI/
 ├── server/
-│   └── index.js
+│   └── index.js              # Express API (Groq Vision + cost)
 ├── client/
 │   ├── public/
 │   └── src/
-│       ├── components/
-│       ├── styles/
-│       └── utils/
-├── sample-input/
+│       ├── components/       # UI steps
+│       ├── styles/           # globals.css
+│       └── utils/            # aiService, costEngine, projectStorage
+├── sample-input/             # sample image
 ├── .env.example
 ├── package.json
 └── README.md
 ```
 
-## Setup
-### 1) Install dependencies
+## Quick Start
+
+### 1) Get a free Groq API key
+Sign up at https://console.groq.com/keys and create a key.
+
+### 2) Install dependencies
+
 ```
 npm run install:all
 ```
 
-### 2) Configure environment
-Copy the example file and add your Groq API key:
+### 3) Configure environment
+
 ```
 cp .env.example .env
 ```
+
 ```
 GROQ_API_KEY=your_groq_key_here
 PORT=3001
 ```
 
-### 3) Run in development
+### 4) Run the app
+
 ```
 npm run dev
 ```
+
 - Frontend: http://localhost:3000
 - Backend: http://localhost:3001
 
-## How It Works (Flow)
-1. Upload image → quality check (brightness/blur/resolution)
-2. Analyze image → detect zones + estimate areas
-3. Select materials → choose finish + color per zone
-4. Generate redesign → description, palette, quantities
-5. Generate cost report → itemized costs + totals
-6. Download PDF report
+## Core Features
+
+- Upload exterior photo with quality checks
+- AI zone detection + editable areas
+- Material selection per zone (color + finish)
+- AI redesign description + quantity estimates
+- Cost estimation with editable rates + contingency
+- PDF report download
+- Auto‑save and resume projects
 
 ## API Endpoints
-### POST /api/analyze-house
-- Input: multipart form with image
-- Output: zones, area estimates, building description
 
-### POST /api/generate-redesign
-- Input: multipart form with image + material selections
-- Output: redesign description, palette, quantities
+| Method | Path | Description |
+|---|---|---|
+| POST | /api/analyze-house | Detect zones and estimate areas |
+| POST | /api/generate-redesign | Redesign description + quantities |
+| POST | /api/generate-cost-report | Itemized cost breakdown |
+| GET | /api/health | Health check |
 
-### POST /api/generate-cost-report
-- Input: JSON with material quantities + custom rates
-- Output: cost items + summary
 
-### GET /api/health
-- Output: server status
+## How It Works (Simple Flow)
+
+1. User uploads a photo → quality check runs
+2. Frontend calls `/api/analyze-house`
+3. User edits zones and selects materials
+4. Frontend calls `/api/generate-redesign`
+5. Frontend calls `/api/generate-cost-report`
+6. Report is rendered and downloadable as PDF
+
+## Environment Variables
+
+Create `.env` from `.env.example`:
+
+- `GROQ_API_KEY` — required
+- `PORT` — backend port (default 3001)
 
 ## Image Limits (Groq)
-- Base64 image input must be <= 4MB
-- Server auto-resizes images to reduce size
 
-## Known Limitations
-- No photorealistic image generation (text + overlay only)
-- Area estimates are approximate
-- Single facade per upload
-- Projects stored locally only
-
-## Deployment (Quick)
-- Host frontend on Vercel/Netlify
-- Host backend on Render/Railway
-- Set `GROQ_API_KEY` in backend environment
-- Point frontend API base to backend URL
+- Base64 image input must be ≤ 4MB
+- Server auto‑resizes images to reduce size
 
 ## Troubleshooting
+
 - 400 image error: check file type/size or quality
 - 413 image too large: try a smaller image
 - 401/403: invalid Groq API key
 
 ## License
+
 MIT
 
 | | |
@@ -255,26 +261,6 @@ IDEAL SHOT:
 - Google Street View screenshot of a residential address
 - A real estate listing photo (front exterior)
 - The provided `sample-input/sample_house.jpg` in this project
-
----
-
-## 🛠 Tech Stack
-
-| Layer | Technology | Role |
-|---|---|---|
-| Frontend UI | React 18 | Component-based SPA |
-| Styling | CSS Variables (vanilla) | Design system — no Bootstrap/MUI |
-| Icons | Lucide React | UI icons throughout |
-| Fonts | Google Fonts (DM Serif Display + Outfit) | Typography |
-| PDF export | jsPDF + html2canvas | Client-side PDF from DOM screenshot |
-| Project save | localStorage (browser) | Auto-save and resume projects |
-| Backend | Node.js + Express | REST API proxy server |
-| File upload | Multer | Multipart image upload handling |
-| AI — Vision | Groq Llama 4 Scout Vision | Zone detection, redesign generation |
-| AI — Text | Groq Llama 4 Scout Vision | Cost estimation |
-| SDK | groq-sdk | Official Groq Node.js SDK |
-| Dev tooling | concurrently | Run frontend + backend in one command |
-| Env config | dotenv | API key management |
 
 ---
 

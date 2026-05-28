@@ -1,6 +1,6 @@
 // All API calls to the backend proxy which calls Groq
 
-const API_BASE = "";  // Uses CRA proxy to localhost:3001
+const API_BASE = "https://renov-ai-backend.onrender.com";  // Uses CRA proxy to localhost:3001
 
 export async function analyzeHouseImage(file) {
   const formData = new FormData();
